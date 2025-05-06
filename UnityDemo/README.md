@@ -1,32 +1,63 @@
-# SimpleDT4UE - Unity Demo
+# Unity Digital Twin Demo
 
-This is the Unity client component of the SimpleDT4UE (Simple Digital Twin for Unity Engine) project. It provides a 3D visualization of the digital twin system using a Christmas tree as a demonstration.
+A Unity-based 3D visualization client for the SimpleDT4UE project. This demo showcases real-time digital twinning using a Christmas tree as the demonstration object.
 
 ## Features
-- Real-time 3D visualization of the digital twin
-- TCP networking for communication with the server
-- Interactive UI controls for tree light manipulation
+
+- Real-time 3D visualization
+- Interactive light control
+- Network synchronization
 - Cross-platform compatibility
 
 ## Requirements
-- Unity 2022.3 LTS or newer
-- Universal Render Pipeline (URP)
+
+- Unity 2022.3 LTS or later
+- .NET Standard 2.1
+- TCP/IP networking support
 
 ## Setup
-1. Clone this repository
-2. Open the project in Unity
-3. Open the SampleScene in Assets/Scenes
-4. Press Play to run the demo
 
-## Network Configuration
-- Default server address: localhost
-- Default port: 5000
-- Configure these in the TreeClient component in the scene
+1. Open the project in Unity Hub
+2. Open the main scene in `Assets/Scenes/Main.unity`
+3. Configure the server IP address in the TreeClient component
+4. Press Play to start the visualization
 
-## Project Structure
-- `Assets/Scripts/TreeClient.cs` - TCP networking implementation
-- `Assets/Scripts/TreeLightController.cs` - 3D tree visualization
-- `Assets/Scripts/TreeLightUI.cs` - UI controls
+## Controls
 
-## Contributing
-Please refer to the main SimpleDT4UE repository for contribution guidelines. 
+- Left-click and drag to rotate the camera
+- Right-click and drag to pan
+- Scroll to zoom in/out
+- Click on lights to toggle their state
+
+## Network Protocol
+
+The client communicates with the server using a simple TCP-based protocol:
+- Connects to the server on port 5000
+- Sends/receives JSON messages for state updates
+- Maintains real-time synchronization
+
+## Development
+
+### Project Structure
+
+- `Assets/Scripts/`
+  - `TreeClient.cs`: Network communication
+  - `TreeLightController.cs`: Light state management
+  - `TreeLightUI.cs`: User interface controls
+
+### Building
+
+1. Open the project in Unity
+2. Go to File > Build Settings
+3. Select your target platform
+4. Click Build
+
+## Troubleshooting
+
+- Ensure the server is running before starting the client
+- Check the console for network connection errors
+- Verify the server IP address is correct
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details. 

@@ -1,50 +1,69 @@
 # SimpleDT4UE - Simple Digital Twin for Unity Engine
 
-A low-cost, open-source digital twinning solution using a Christmas tree as a demonstration application. This project showcases real-time digital twinning with multiple client applications communicating with a central server.
+A low-cost, open-source digital twinning solution using a Christmas tree as a demonstration application. This project showcases real-time synchronization between multiple clients (Python, macOS, iOS, and Unity) communicating with a central Python server.
 
 ## Project Structure
 
-The project is split into multiple repositories:
+The project is organized into several components:
 
-1. [Unity Demo](UnityDemo/) - 3D visualization client
-2. [macOS Demo](MacOSDemo/) - Native macOS client
-3. [iOS Demo](iOSDemo/) - Native iOS client
-4. [Raspberry Pi Server](PiServer/) - Central server implementation
-5. [Python Demo](PythonDemo/) - Python reference client
+- **UnityDemo/**: Unity-based 3D visualization of the digital twin
+- **MacOSDemo/**: macOS application for controlling the digital twin
+- **iOSDemo/**: iOS application for mobile control of the digital twin
+- **PiServer/**: Python server implementation for Raspberry Pi
+- **PythonDemo/**: Python client implementation
 
 ## Features
 
-- Real-time digital twinning
-- Multiple client platforms:
-  - Unity (3D visualization)
-  - macOS (native app)
-  - iOS (mobile app)
-  - Python (reference implementation)
-- Centralized server on Raspberry Pi
-- TCP-based communication
-- Cross-platform compatibility
+- Real-time synchronization between multiple clients
+- Cross-platform compatibility (Windows, macOS, iOS, Linux)
+- 3D visualization in Unity
+- Mobile control interface
+- Low-cost implementation using Raspberry Pi
+- Open-source and easily adaptable for other digital twin applications
 
 ## Getting Started
 
-1. Clone the desired repositories
-2. Follow the setup instructions in each repository's README
-3. Start the Raspberry Pi server
-4. Run any of the client applications
+### Prerequisites
+
+- Unity 2022.3 LTS or later
+- Python 3.8 or later
+- Xcode 14 or later (for iOS/macOS development)
+- Raspberry Pi (for server implementation)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/drdukegledhill/SimpleDT4UE.git
+   ```
+
+2. Set up the Python server:
+   ```bash
+   cd PiServer
+   pip install -r requirements.txt
+   python server.py
+   ```
+
+3. Open the Unity project:
+   - Open Unity Hub
+   - Add the UnityDemo directory
+   - Open the project
+
+4. Build and run the iOS/macOS applications:
+   - Open the iOSDemo or MacOSDemo in Xcode
+   - Build and run on your device
 
 ## Network Protocol
 
-All clients communicate with the server using a simple TCP-based protocol:
-- Default port: 5000
-- JSON-based message format
-- Real-time state synchronization
+The system uses a simple TCP-based protocol for communication:
+
+- Server listens on port 5000
+- Clients connect and send/receive JSON messages
+- Real-time updates for all connected clients
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
@@ -52,6 +71,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- Unity Technologies for the game engine
-- Raspberry Pi Foundation for the server platform
-- Apple for the iOS/macOS development tools
+- Developed as part of the University of Huddersfield's digital twinning research
+- Special thanks to the open-source community for their invaluable tools and libraries
