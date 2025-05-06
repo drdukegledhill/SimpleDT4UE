@@ -6,6 +6,8 @@ Provides a graphical interface to control individual pixels.
 
 import sys
 import json
+import time
+import random
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                             QHBoxLayout, QLabel, QSlider, QPushButton, 
                             QComboBox, QGridLayout, QSpacerItem, QSizePolicy,
@@ -169,6 +171,7 @@ class TreeControlWindow(QMainWindow):
         super().__init__()
         self.tree_client = TreeClient()
         self.pixel_colors = [[0, 0, 0] for _ in range(25)]
+        self.demo_running = False  # Add flag to control demo
         self.init_ui()
         
     def init_ui(self):
@@ -361,6 +364,49 @@ class TreeControlWindow(QMainWindow):
         self.off_all_button.clicked.connect(self.turn_off_all)
         bottom_layout.addWidget(self.off_all_button)
         
+        self.demo_button = QPushButton('Run Demo Sequence')
+        self.demo_button.setStyleSheet("""
+            QPushButton {
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+            QPushButton:hover {
+                background-color: #0071EB;
+            }
+            QPushButton:pressed {
+                background-color: #0062CC;
+            }
+        """)
+        self.demo_button.clicked.connect(self.run_demo_sequence)
+        bottom_layout.addWidget(self.demo_button)
+        
+        self.stop_demo_button = QPushButton('Stop Demo')
+        self.stop_demo_button.setStyleSheet("""
+            QPushButton {
+                background-color: #999999;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+            QPushButton:hover {
+                background-color: #FF453A;
+            }
+            QPushButton:pressed {
+                background-color: #FF2D55;
+            }
+        """)
+        self.stop_demo_button.clicked.connect(self.stop_demo)
+        self.stop_demo_button.setEnabled(False)  # Initially disabled
+        bottom_layout.addWidget(self.stop_demo_button)
+        
         bottom_layout.addStretch()
         
         # Add bottom panel to main layout
@@ -451,6 +497,151 @@ class TreeControlWindow(QMainWindow):
         except Exception as e:
             self.statusBar().showMessage(f'Error: {str(e)}')
     
+    def stop_demo(self):
+        """Stop the running demo sequence."""
+        self.demo_running = False
+        self.demo_button.setEnabled(True)
+        self.stop_demo_button.setEnabled(False)
+        self.stop_demo_button.setStyleSheet("""
+            QPushButton {
+                background-color: #999999;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+            QPushButton:hover {
+                background-color: #FF453A;
+            }
+            QPushButton:pressed {
+                background-color: #FF2D55;
+            }
+        """)
+        self.statusBar().showMessage('Demo stopped')
+        self.turn_off_all()  # Turn off all lights when stopping
+    
+    def run_demo_sequence(self):
+        """Run the demo sequence of animations."""
+        try:
+            self.demo_running = True
+            self.demo_button.setEnabled(False)
+            self.stop_demo_button.setEnabled(True)
+            self.stop_demo_button.setStyleSheet("""
+                QPushButton {
+                    background-color: #FF3B30;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    min-width: 150px;
+                }
+                QPushButton:hover {
+                    background-color: #FF453A;
+                }
+                QPushButton:pressed {
+                    background-color: #FF2D55;
+                }
+            """)
+            self.statusBar().showMessage('Running demo sequence...')
+            
+            # Color wipes
+            for color, name in [([1, 0, 0], 'red'), ([0, 1, 0], 'green'), ([0, 0, 1], 'blue')]:
+                if not self.demo_running:
+                    return
+                self.statusBar().showMessage(f'Running {name} color wipe...')
+                for i in range(25):
+                    if not self.demo_running:
+                        return
+                    self.tree_client.set_pixel(i, color)
+                    self.pixel_colors[i] = color
+                    self.update_button_color(i, color)
+                    QApplication.processEvents()
+                    time.sleep(0.1)
+                time.sleep(0.5)
+            
+            # Static rainbow pattern
+            if self.demo_running:
+                self.statusBar().showMessage('Setting rainbow pattern...')
+                for i in range(25):
+                    if not self.demo_running:
+                        return
+                    hue = i / 25.0  # Evenly distribute colors
+                    r, g, b = self.hsv_to_rgb(hue, 1.0, 1.0)
+                    self.tree_client.set_pixel(i, [r, g, b])
+                    self.pixel_colors[i] = [r, g, b]
+                    self.update_button_color(i, self.pixel_colors[i])
+                    QApplication.processEvents()
+                time.sleep(2)  # Show the pattern for 2 seconds
+            
+            # Sparkle effect
+            if self.demo_running:
+                self.statusBar().showMessage('Running sparkle effect...')
+                for _ in range(50):  # 50 sparkles
+                    if not self.demo_running:
+                        return
+                    pixel = random.randint(0, 24)
+                    color = [random.random(), random.random(), random.random()]
+                    self.tree_client.set_pixel(pixel, color)
+                    self.pixel_colors[pixel] = color
+                    self.update_button_color(pixel, color)
+                    QApplication.processEvents()
+                    time.sleep(0.1)
+            
+            if self.demo_running:
+                self.statusBar().showMessage('Demo sequence completed')
+                self.turn_off_all()  # Turn off all lights at the end
+        except Exception as e:
+            self.statusBar().showMessage(f'Error during demo: {str(e)}')
+        finally:
+            self.demo_running = False
+            self.demo_button.setEnabled(True)
+            self.stop_demo_button.setEnabled(False)
+            self.stop_demo_button.setStyleSheet("""
+                QPushButton {
+                    background-color: #999999;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 6px;
+                    font-size: 14px;
+                    min-width: 150px;
+                }
+                QPushButton:hover {
+                    background-color: #FF453A;
+                }
+                QPushButton:pressed {
+                    background-color: #FF2D55;
+                }
+            """)
+    
+    def hsv_to_rgb(self, h, s, v):
+        """Convert HSV to RGB color."""
+        if s == 0.0:
+            return v, v, v
+        
+        i = int(h * 6.0)
+        f = (h * 6.0) - i
+        p = v * (1.0 - s)
+        q = v * (1.0 - s * f)
+        t = v * (1.0 - s * (1.0 - f))
+        i = i % 6
+        
+        if i == 0:
+            return v, t, p
+        if i == 1:
+            return q, v, p
+        if i == 2:
+            return p, v, t
+        if i == 3:
+            return p, q, v
+        if i == 4:
+            return t, p, v
+        if i == 5:
+            return v, p, q
+
     def closeEvent(self, event):
         """Handle window close event."""
         try:
