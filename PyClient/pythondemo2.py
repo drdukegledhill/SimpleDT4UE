@@ -16,6 +16,7 @@ from tree_client import TreeClient
 class ColorPicker(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.parent = parent  # Store reference to parent window
         self.init_ui()
         
     def init_ui(self):
@@ -79,8 +80,21 @@ class ColorPicker(QWidget):
             f"background-color: rgb({r}, {g}, {b}); border: 1px solid gray;"
         )
         
-        # Return normalized color values (0-1)
-        return [r/255, g/255, b/255]
+        # Get normalized color values (0-1)
+        color = [r/255, g/255, b/255]
+        
+        # Update the selected pixel in real-time
+        if self.parent:
+            pixel = self.parent.get_selected_pixel()
+            if pixel is not None:
+                try:
+                    self.parent.tree_client.set_pixel(pixel, color)
+                    self.parent.pixel_colors[pixel] = color
+                    self.parent.update_button_color(pixel, color)
+                except Exception as e:
+                    self.parent.statusBar().showMessage(f'Error: {str(e)}')
+        
+        return color
 
     def set_color(self, color: list):
         """Set the color picker to a specific color."""
@@ -113,11 +127,11 @@ class TreeControlWindow(QMainWindow):
         # Create pixel buttons
         self.pixel_buttons = [None] * 25  # Initialize with None to maintain correct indices
         
-        # Star at the top (pixel 4)
+        # Star at the top (pixel 3)
         star_layout = QHBoxLayout()
         star_layout.addStretch()
-        star_btn = self.create_pixel_button(4, "★")
-        self.pixel_buttons[4] = star_btn  # Store at correct index
+        star_btn = self.create_pixel_button(3, "★")
+        self.pixel_buttons[3] = star_btn  # Store at correct index
         star_layout.addWidget(star_btn)
         star_layout.addStretch()
         tree_layout.addLayout(star_layout)
@@ -129,14 +143,27 @@ class TreeControlWindow(QMainWindow):
         pixel_index = 0
         for col in range(8):
             col_layout = QVBoxLayout()
+            # Create a list to hold the buttons for this column
+            col_buttons = []
+            
+            # Create the buttons for this column
             for row in range(3):
-                if pixel_index == 4:  # Skip the star pixel
+                if pixel_index == 3:  # Skip the star pixel
                     pixel_index += 1
                 current_index = pixel_index  # Capture the current index
                 btn = self.create_pixel_button(current_index)
                 self.pixel_buttons[current_index] = btn  # Store at correct index
-                col_layout.addWidget(btn)
+                col_buttons.append(btn)
                 pixel_index += 1
+            
+            # Add buttons to column layout in correct order
+            if col % 2 == 0:  # Even columns (0, 2, 4, 6) - bottom to top
+                for btn in reversed(col_buttons):
+                    col_layout.addWidget(btn)
+            else:  # Odd columns (1, 3, 5, 7) - top to bottom
+                for btn in col_buttons:
+                    col_layout.addWidget(btn)
+            
             tree_body.addLayout(col_layout)
         
         tree_layout.addLayout(tree_body)
@@ -146,19 +173,19 @@ class TreeControlWindow(QMainWindow):
         right_layout = QVBoxLayout(right_panel)
         
         # Add color picker
-        self.color_picker = ColorPicker()
+        self.color_picker = ColorPicker(self)  # Pass self as parent
         right_layout.addWidget(self.color_picker)
         
         # Add control buttons
         control_layout = QHBoxLayout()
         
-        self.apply_button = QPushButton('Apply Color')
-        self.apply_button.clicked.connect(self.apply_color)
-        control_layout.addWidget(self.apply_button)
+        self.off_selected_button = QPushButton('Turn Off Selected')
+        self.off_selected_button.clicked.connect(self.turn_off_selected)
+        control_layout.addWidget(self.off_selected_button)
         
-        self.off_button = QPushButton('Turn Off')
-        self.off_button.clicked.connect(self.turn_off)
-        control_layout.addWidget(self.off_button)
+        self.off_all_button = QPushButton('Turn Off All')
+        self.off_all_button.clicked.connect(self.turn_off_all)
+        control_layout.addWidget(self.off_all_button)
         
         right_layout.addLayout(control_layout)
         
@@ -224,19 +251,18 @@ class TreeControlWindow(QMainWindow):
                 return i
         return None
     
-    def apply_color(self):
+    def turn_off_selected(self):
         pixel = self.get_selected_pixel()
         if pixel is not None:
-            color = self.color_picker.update_color()
             try:
-                self.tree_client.set_pixel(pixel, color)
-                self.pixel_colors[pixel] = color
-                self.update_button_color(pixel, color)
-                self.statusBar().showMessage(f'Set pixel {pixel} to color {color}')
+                self.tree_client.set_pixel(pixel, [0, 0, 0])
+                self.pixel_colors[pixel] = [0, 0, 0]
+                self.update_button_color(pixel, [0, 0, 0])
+                self.statusBar().showMessage(f'Turned off pixel {pixel}')
             except Exception as e:
                 self.statusBar().showMessage(f'Error: {str(e)}')
     
-    def turn_off(self):
+    def turn_off_all(self):
         try:
             self.tree_client.off()
             # Update all buttons to black
@@ -251,11 +277,7 @@ class TreeControlWindow(QMainWindow):
         """Handle window close event."""
         try:
             # Turn off all lights
-            self.tree_client.off()
-            # Update all buttons to black
-            for i in range(25):
-                self.pixel_colors[i] = [0, 0, 0]
-                self.update_button_color(i, [0, 0, 0])
+            self.turn_off_all()
             # Disconnect from server
             self.tree_client.disconnect()
             self.statusBar().showMessage('Lights turned off and disconnected')
