@@ -122,3 +122,41 @@ crashlytics-build.properties
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
 /[Pp]ackage[Cc]ache/
+
+# Additional Unity ignores for large files
+/[Aa]ssets/[Bb]urst/
+/[Aa]ssets/[Cc]ompiler/
+/[Aa]ssets/[Ss]treamingAssets/
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.hash*
+
+# Unity generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity3D generated file on crash reports
+sysinfo.txt
+
+# Builds
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# Crashlytics generated file
+crashlytics-build.properties
+
+# Packed Addressables
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# Temporary auto-generated Android Assets
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# This .gitignore file should be placed at the root of your Unity project directory
+#
+# Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
+#
+/[Pp]ackage[Cc]ache/
