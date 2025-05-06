@@ -8,59 +8,118 @@ import sys
 import json
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                             QHBoxLayout, QLabel, QSlider, QPushButton, 
-                            QComboBox, QGridLayout, QSpacerItem, QSizePolicy)
+                            QComboBox, QGridLayout, QSpacerItem, QSizePolicy,
+                            QFrame)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
+from PyQt6.QtGui import QColor, QPalette, QFont
 from tree_client import TreeClient
 
 class ColorPicker(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.parent = parent  # Store reference to parent window
+        self.parent = parent
         self.init_ui()
         
     def init_ui(self):
         layout = QVBoxLayout()
+        layout.setSpacing(8)
+        layout.setContentsMargins(20, 20, 20, 20)
         
-        # Red slider
-        self.red_slider = QSlider(Qt.Orientation.Horizontal)
-        self.red_slider.setRange(0, 255)
-        self.red_slider.setValue(0)
-        self.red_slider.valueChanged.connect(self.update_color)
+        # Title
+        title = QLabel("Color Controls")
+        title.setFont(QFont("SF Pro Display", 16, QFont.Weight.Bold))
+        layout.addWidget(title)
         
-        # Green slider
-        self.green_slider = QSlider(Qt.Orientation.Horizontal)
-        self.green_slider.setRange(0, 255)
-        self.green_slider.setValue(0)
-        self.green_slider.valueChanged.connect(self.update_color)
+        # Add some spacing
+        layout.addSpacing(10)
         
-        # Blue slider
-        self.blue_slider = QSlider(Qt.Orientation.Horizontal)
-        self.blue_slider.setRange(0, 255)
-        self.blue_slider.setValue(0)
-        self.blue_slider.valueChanged.connect(self.update_color)
+        # Color sliders with labels
+        for color, label in [("Red", "red_slider"), ("Green", "green_slider"), ("Blue", "blue_slider")]:
+            color_layout = QVBoxLayout()
+            color_label = QLabel(color)
+            color_label.setFont(QFont("SF Pro Text", 12))
+            color_layout.addWidget(color_label)
+            
+            slider = QSlider(Qt.Orientation.Horizontal)
+            slider.setRange(0, 255)
+            slider.setValue(0)
+            slider.valueChanged.connect(self.update_color)
+            slider.setStyleSheet("""
+                QSlider::groove:horizontal {
+                    border: 1px solid #999999;
+                    height: 8px;
+                    background: #f0f0f0;
+                    margin: 2px 0;
+                    border-radius: 4px;
+                }
+                QSlider::handle:horizontal {
+                    background: #007AFF;
+                    border: none;
+                    width: 16px;
+                    height: 16px;
+                    margin: -4px 0;
+                    border-radius: 8px;
+                }
+            """)
+            color_layout.addWidget(slider)
+            setattr(self, label, slider)
+            layout.addLayout(color_layout)
         
         # Brightness slider
+        brightness_layout = QVBoxLayout()
+        brightness_label = QLabel("Brightness")
+        brightness_label.setFont(QFont("SF Pro Text", 12))
+        brightness_layout.addWidget(brightness_label)
+        
         self.brightness_slider = QSlider(Qt.Orientation.Horizontal)
         self.brightness_slider.setRange(0, 100)
         self.brightness_slider.setValue(100)
         self.brightness_slider.valueChanged.connect(self.update_color)
+        self.brightness_slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                border: 1px solid #999999;
+                height: 8px;
+                background: #f0f0f0;
+                margin: 2px 0;
+                border-radius: 4px;
+            }
+            QSlider::handle:horizontal {
+                background: #007AFF;
+                border: none;
+                width: 16px;
+                height: 16px;
+                margin: -4px 0;
+                border-radius: 8px;
+            }
+        """)
+        brightness_layout.addWidget(self.brightness_slider)
+        layout.addLayout(brightness_layout)
+        
+        # Add some spacing
+        layout.addSpacing(20)
         
         # Color preview
-        self.color_preview = QLabel()
-        self.color_preview.setFixedSize(100, 100)
-        self.color_preview.setStyleSheet("background-color: black; border: 1px solid gray;")
+        preview_frame = QFrame()
+        preview_frame.setFrameStyle(QFrame.Shape.Box | QFrame.Shadow.Sunken)
+        preview_layout = QVBoxLayout(preview_frame)
         
-        # Add widgets to layout
-        layout.addWidget(QLabel("Red"))
-        layout.addWidget(self.red_slider)
-        layout.addWidget(QLabel("Green"))
-        layout.addWidget(self.green_slider)
-        layout.addWidget(QLabel("Blue"))
-        layout.addWidget(self.blue_slider)
-        layout.addWidget(QLabel("Brightness"))
-        layout.addWidget(self.brightness_slider)
-        layout.addWidget(self.color_preview)
+        preview_label = QLabel("Preview")
+        preview_label.setFont(QFont("SF Pro Text", 12))
+        preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        preview_layout.addWidget(preview_label)
+        
+        self.color_preview = QLabel()
+        self.color_preview.setFixedSize(120, 120)
+        self.color_preview.setStyleSheet("""
+            background-color: black;
+            border: 1px solid #999999;
+            border-radius: 8px;
+        """)
+        preview_layout.addWidget(self.color_preview)
+        preview_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        layout.addWidget(preview_frame)
+        layout.addStretch()
         
         self.setLayout(layout)
     
@@ -76,9 +135,11 @@ class ColorPicker(QWidget):
         b = int(b * brightness)
         
         # Update preview
-        self.color_preview.setStyleSheet(
-            f"background-color: rgb({r}, {g}, {b}); border: 1px solid gray;"
-        )
+        self.color_preview.setStyleSheet(f"""
+            background-color: rgb({r}, {g}, {b});
+            border: 1px solid #999999;
+            border-radius: 8px;
+        """)
         
         # Get normalized color values (0-1)
         color = [r/255, g/255, b/255]
@@ -108,76 +169,130 @@ class TreeControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.tree_client = TreeClient()
-        self.pixel_colors = [[0, 0, 0] for _ in range(25)]  # Track colors for each pixel
+        self.pixel_colors = [[0, 0, 0] for _ in range(25)]
         self.init_ui()
         
     def init_ui(self):
         self.setWindowTitle('RGB Tree Controller')
-        self.setGeometry(100, 100, 1000, 800)
+        self.setGeometry(100, 100, 1200, 800)
+        
+        # Set window style
+        self.setStyleSheet("""
+            QMainWindow {
+                background-color: #f5f5f7;
+            }
+            QLabel {
+                color: #1d1d1f;
+            }
+            QPushButton {
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-family: "SF Pro Text";
+                font-size: 13px;
+            }
+            QPushButton:hover {
+                background-color: #0071EB;
+            }
+            QPushButton:pressed {
+                background-color: #0062CC;
+            }
+            QPushButton:disabled {
+                background-color: #999999;
+            }
+        """)
         
         # Create central widget and main layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout(central_widget)
+        main_layout.setSpacing(20)
+        main_layout.setContentsMargins(20, 20, 20, 20)
         
         # Left side: Tree layout
         left_panel = QWidget()
+        left_panel.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border-radius: 10px;
+            }
+        """)
         tree_layout = QVBoxLayout(left_panel)
+        tree_layout.setContentsMargins(20, 20, 20, 20)
+        
+        # Title
+        title = QLabel("RGB Christmas Tree")
+        title.setFont(QFont("SF Pro Display", 20, QFont.Weight.Bold))
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        tree_layout.addWidget(title)
+        
+        # Add some spacing
+        tree_layout.addSpacing(20)
         
         # Create pixel buttons
-        self.pixel_buttons = [None] * 25  # Initialize with None to maintain correct indices
+        self.pixel_buttons = [None] * 25
         
         # Star at the top (pixel 3)
         star_layout = QHBoxLayout()
         star_layout.addStretch()
         star_btn = self.create_pixel_button(3, "★")
-        self.pixel_buttons[3] = star_btn  # Store at correct index
+        self.pixel_buttons[3] = star_btn
         star_layout.addWidget(star_btn)
         star_layout.addStretch()
         tree_layout.addLayout(star_layout)
         
         # Tree body (8 columns of 3 pixels)
         tree_body = QHBoxLayout()
+        tree_body.setSpacing(10)
         
         # Create columns
         pixel_index = 0
         for col in range(8):
             col_layout = QVBoxLayout()
-            # Create a list to hold the buttons for this column
+            col_layout.setSpacing(10)
             col_buttons = []
             
-            # Create the buttons for this column
             for row in range(3):
-                if pixel_index == 3:  # Skip the star pixel
+                if pixel_index == 3:
                     pixel_index += 1
-                current_index = pixel_index  # Capture the current index
+                current_index = pixel_index
                 btn = self.create_pixel_button(current_index)
-                self.pixel_buttons[current_index] = btn  # Store at correct index
+                self.pixel_buttons[current_index] = btn
                 col_buttons.append(btn)
                 pixel_index += 1
             
-            # Add buttons to column layout in correct order
-            if col % 2 == 0:  # Even columns (0, 2, 4, 6) - bottom to top
+            if col % 2 == 0:
                 for btn in reversed(col_buttons):
                     col_layout.addWidget(btn)
-            else:  # Odd columns (1, 3, 5, 7) - top to bottom
+            else:
                 for btn in col_buttons:
                     col_layout.addWidget(btn)
             
             tree_body.addLayout(col_layout)
         
         tree_layout.addLayout(tree_body)
+        tree_layout.addStretch()
         
         # Right side: Color picker
         right_panel = QWidget()
+        right_panel.setStyleSheet("""
+            QWidget {
+                background-color: white;
+                border-radius: 10px;
+            }
+        """)
         right_layout = QVBoxLayout(right_panel)
+        right_layout.setContentsMargins(0, 0, 0, 0)
         
         # Add color picker
-        self.color_picker = ColorPicker(self)  # Pass self as parent
+        self.color_picker = ColorPicker(self)
         right_layout.addWidget(self.color_picker)
         
         # Add control buttons
         control_layout = QHBoxLayout()
+        control_layout.setSpacing(10)
         
         self.off_selected_button = QPushButton('Turn Off Selected')
         self.off_selected_button.clicked.connect(self.turn_off_selected)
@@ -190,7 +305,7 @@ class TreeControlWindow(QMainWindow):
         right_layout.addLayout(control_layout)
         
         # Add panels to main layout
-        main_layout.addWidget(left_panel, 2)  # Give more space to the tree
+        main_layout.addWidget(left_panel, 2)
         main_layout.addWidget(right_panel, 1)
         
         # Connect to the tree
@@ -208,14 +323,18 @@ class TreeControlWindow(QMainWindow):
         btn.setFixedSize(60, 60)
         btn.setStyleSheet("""
             QPushButton {
-                border: 2px solid #8f8f91;
-                border-radius: 6px;
+                border: 2px solid #e0e0e0;
+                border-radius: 30px;
                 background-color: black;
                 color: white;
+                font-family: "SF Pro Text";
                 font-size: 12px;
             }
             QPushButton:checked {
-                border: 2px solid #0078d7;
+                border: 2px solid #007AFF;
+            }
+            QPushButton:hover {
+                border-color: #007AFF;
             }
         """)
         return btn
@@ -225,24 +344,26 @@ class TreeControlWindow(QMainWindow):
         r, g, b = [int(c * 255) for c in color]
         self.pixel_buttons[index].setStyleSheet(f"""
             QPushButton {{
-                border: 2px solid #8f8f91;
-                border-radius: 6px;
+                border: 2px solid #e0e0e0;
+                border-radius: 30px;
                 background-color: rgb({r}, {g}, {b});
                 color: {'white' if (r + g + b) < 384 else 'black'};
+                font-family: "SF Pro Text";
+                font-size: 12px;
             }}
             QPushButton:checked {{
-                border: 2px solid #0078d7;
+                border: 2px solid #007AFF;
+            }}
+            QPushButton:hover {{
+                border-color: #007AFF;
             }}
         """)
     
     def select_pixel(self, index):
         """Select a pixel and update the color picker."""
-        # Uncheck all other buttons
         for btn in self.pixel_buttons:
             if btn is not None:
                 btn.setChecked(btn == self.pixel_buttons[index])
-        
-        # Update color picker to show current color
         self.color_picker.set_color(self.pixel_colors[index])
     
     def get_selected_pixel(self):
@@ -265,7 +386,6 @@ class TreeControlWindow(QMainWindow):
     def turn_off_all(self):
         try:
             self.tree_client.off()
-            # Update all buttons to black
             for i in range(25):
                 self.pixel_colors[i] = [0, 0, 0]
                 self.update_button_color(i, [0, 0, 0])
@@ -276,9 +396,7 @@ class TreeControlWindow(QMainWindow):
     def closeEvent(self, event):
         """Handle window close event."""
         try:
-            # Turn off all lights
             self.turn_off_all()
-            # Disconnect from server
             self.tree_client.disconnect()
             self.statusBar().showMessage('Lights turned off and disconnected')
         except Exception as e:
@@ -288,6 +406,10 @@ class TreeControlWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    
+    # Set application-wide font
+    app.setFont(QFont("SF Pro Text", 13))
+    
     window = TreeControlWindow()
     window.show()
     sys.exit(app.exec())
