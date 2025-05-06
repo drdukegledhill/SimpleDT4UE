@@ -1,4 +1,4 @@
-# SimpleDT4UE (Simple Device Tree for Unreal Engine)
+# SimpleDT4UE (Simple Digital Twin for Unreal Engine)
 
 A flexible network server for controlling physical devices, with a focus on the RGB Christmas Tree and Unreal Engine integration.
 
