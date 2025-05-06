@@ -131,7 +131,8 @@ class TreeControlWindow(QMainWindow):
             for row in range(3):
                 if pixel_index == 3:  # Skip the star pixel
                     pixel_index += 1
-                btn = self.create_pixel_button(pixel_index)
+                current_index = pixel_index  # Capture the current index
+                btn = self.create_pixel_button(current_index)
                 col_layout.addWidget(btn)
                 pixel_index += 1
             tree_body.addLayout(col_layout)
