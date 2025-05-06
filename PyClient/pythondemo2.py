@@ -125,13 +125,15 @@ class TreeControlWindow(QMainWindow):
         tree_body = QHBoxLayout()
         
         # Create columns
+        pixel_index = 0
         for col in range(8):
             col_layout = QVBoxLayout()
             for row in range(3):
-                pixel_num = col * 3 + row
-                if pixel_num != 3:  # Skip the star pixel
-                    btn = self.create_pixel_button(pixel_num)
-                    col_layout.addWidget(btn)
+                if pixel_index == 3:  # Skip the star pixel
+                    pixel_index += 1
+                btn = self.create_pixel_button(pixel_index)
+                col_layout.addWidget(btn)
+                pixel_index += 1
             tree_body.addLayout(col_layout)
         
         tree_layout.addLayout(tree_body)
