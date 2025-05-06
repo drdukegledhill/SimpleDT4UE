@@ -12,16 +12,21 @@ import math
 from typing import List, Tuple
 
 class TreeClient:
-    def __init__(self, host: str = "localhost", port: int = 65436):
+    def __init__(self, host: str = "simpledigitaltwin.local", port: int = 65436):
         self.host = host
         self.port = port
         self.socket = None
 
     def connect(self) -> None:
         """Connect to the tree server."""
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.host, self.port))
-        print(f"Connected to server at {self.host}:{self.port}")
+        try:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.connect((self.host, self.port))
+            print(f"Connected to server at {self.host}:{self.port}")
+        except socket.gaierror as e:
+            raise ConnectionError(f"Could not resolve hostname {self.host}. Make sure the Raspberry Pi is running and the hostname is correct.") from e
+        except ConnectionRefusedError as e:
+            raise ConnectionError(f"Connection refused to {self.host}:{self.port}. Make sure the server is running.") from e
 
     def disconnect(self) -> None:
         """Disconnect from the tree server."""
@@ -126,8 +131,8 @@ class TreeClient:
 
 def main():
     """Run the demo."""
-    # Create client with known IP address
-    client = TreeClient(host="192.168.1.100")  # Replace with your Pi's IP
+    # Create client with DNS name
+    client = TreeClient(host="simpledigitaltwin.local")  # Using mDNS name
     
     try:
         client.connect()
