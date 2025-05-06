@@ -82,10 +82,19 @@ class ColorPicker(QWidget):
         # Return normalized color values (0-1)
         return [r/255, g/255, b/255]
 
+    def set_color(self, color: list):
+        """Set the color picker to a specific color."""
+        r, g, b = [int(c * 255) for c in color]
+        self.red_slider.setValue(r)
+        self.green_slider.setValue(g)
+        self.blue_slider.setValue(b)
+        self.brightness_slider.setValue(100)
+
 class TreeControlWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.tree_client = TreeClient()
+        self.pixel_colors = [[0, 0, 0] for _ in range(25)]  # Track colors for each pixel
         self.init_ui()
         
     def init_ui(self):
@@ -107,6 +116,18 @@ class TreeControlWindow(QMainWindow):
             btn = QPushButton(f'Pixel {i}')
             btn.setCheckable(True)
             btn.clicked.connect(lambda checked, idx=i: self.select_pixel(idx))
+            btn.setFixedSize(60, 60)  # Make buttons square
+            btn.setStyleSheet("""
+                QPushButton {
+                    border: 2px solid #8f8f91;
+                    border-radius: 6px;
+                    background-color: black;
+                    color: white;
+                }
+                QPushButton:checked {
+                    border: 2px solid #0078d7;
+                }
+            """)
             row = i // 5
             col = i % 5
             grid_layout.addWidget(btn, row, col)
@@ -144,10 +165,28 @@ class TreeControlWindow(QMainWindow):
         except Exception as e:
             self.statusBar().showMessage(f'Connection error: {str(e)}')
     
+    def update_button_color(self, index: int, color: list):
+        """Update the color of a pixel button."""
+        r, g, b = [int(c * 255) for c in color]
+        self.pixel_buttons[index].setStyleSheet(f"""
+            QPushButton {{
+                border: 2px solid #8f8f91;
+                border-radius: 6px;
+                background-color: rgb({r}, {g}, {b});
+                color: {'white' if (r + g + b) < 384 else 'black'};
+            }}
+            QPushButton:checked {{
+                border: 2px solid #0078d7;
+            }}
+        """)
+    
     def select_pixel(self, index):
         # Uncheck all other buttons
         for i, btn in enumerate(self.pixel_buttons):
             btn.setChecked(i == index)
+        
+        # Update color picker to show current color
+        self.color_picker.set_color(self.pixel_colors[index])
     
     def get_selected_pixel(self):
         for i, btn in enumerate(self.pixel_buttons):
@@ -161,6 +200,8 @@ class TreeControlWindow(QMainWindow):
             color = self.color_picker.update_color()
             try:
                 self.tree_client.set_pixel(pixel, color)
+                self.pixel_colors[pixel] = color
+                self.update_button_color(pixel, color)
                 self.statusBar().showMessage(f'Set pixel {pixel} to color {color}')
             except Exception as e:
                 self.statusBar().showMessage(f'Error: {str(e)}')
@@ -168,6 +209,10 @@ class TreeControlWindow(QMainWindow):
     def turn_off(self):
         try:
             self.tree_client.off()
+            # Update all buttons to black
+            for i in range(25):
+                self.pixel_colors[i] = [0, 0, 0]
+                self.update_button_color(i, [0, 0, 0])
             self.statusBar().showMessage('Turned off all pixels')
         except Exception as e:
             self.statusBar().showMessage(f'Error: {str(e)}')
