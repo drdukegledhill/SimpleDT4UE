@@ -8,7 +8,7 @@ import sys
 import json
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                             QHBoxLayout, QLabel, QSlider, QPushButton, 
-                            QComboBox, QGridLayout)
+                            QComboBox, QGridLayout, QSpacerItem, QSizePolicy)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor
 from tree_client import TreeClient
@@ -99,39 +99,42 @@ class TreeControlWindow(QMainWindow):
         
     def init_ui(self):
         self.setWindowTitle('RGB Tree Controller')
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 1000, 800)
         
         # Create central widget and main layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QHBoxLayout(central_widget)
         
-        # Left side: Pixel selection grid
+        # Left side: Tree layout
         left_panel = QWidget()
-        grid_layout = QGridLayout(left_panel)
+        tree_layout = QVBoxLayout(left_panel)
         
-        # Create pixel buttons in a grid
+        # Create pixel buttons
         self.pixel_buttons = []
-        for i in range(25):  # 25 pixels in the tree
-            btn = QPushButton(f'Pixel {i}')
-            btn.setCheckable(True)
-            btn.clicked.connect(lambda checked, idx=i: self.select_pixel(idx))
-            btn.setFixedSize(60, 60)  # Make buttons square
-            btn.setStyleSheet("""
-                QPushButton {
-                    border: 2px solid #8f8f91;
-                    border-radius: 6px;
-                    background-color: black;
-                    color: white;
-                }
-                QPushButton:checked {
-                    border: 2px solid #0078d7;
-                }
-            """)
-            row = i // 5
-            col = i % 5
-            grid_layout.addWidget(btn, row, col)
-            self.pixel_buttons.append(btn)
+        
+        # Star at the top (pixel 3)
+        star_layout = QHBoxLayout()
+        star_layout.addStretch()
+        star_btn = self.create_pixel_button(3, "★")
+        star_layout.addWidget(star_btn)
+        star_layout.addStretch()
+        tree_layout.addLayout(star_layout)
+        
+        # Tree body (8 columns of 3 pixels)
+        tree_body = QHBoxLayout()
+        
+        # Create columns
+        for col in range(8):
+            col_layout = QVBoxLayout()
+            for row in range(3):
+                pixel_num = col * 3 + row
+                if pixel_num != 3:  # Skip the star pixel
+                    btn = self.create_pixel_button(pixel_num)
+                    col_layout.addWidget(btn)
+            tree_body.addLayout(col_layout)
+        
+        tree_layout.addLayout(tree_body)
         
         # Right side: Color picker
         right_panel = QWidget()
@@ -155,7 +158,7 @@ class TreeControlWindow(QMainWindow):
         right_layout.addLayout(control_layout)
         
         # Add panels to main layout
-        main_layout.addWidget(left_panel, 1)
+        main_layout.addWidget(left_panel, 2)  # Give more space to the tree
         main_layout.addWidget(right_panel, 1)
         
         # Connect to the tree
@@ -165,6 +168,27 @@ class TreeControlWindow(QMainWindow):
         except Exception as e:
             self.statusBar().showMessage(f'Connection error: {str(e)}')
     
+    def create_pixel_button(self, index: int, text: str = None) -> QPushButton:
+        """Create a pixel button with consistent styling."""
+        btn = QPushButton(text or f'Pixel {index}')
+        btn.setCheckable(True)
+        btn.clicked.connect(lambda checked, idx=index: self.select_pixel(idx))
+        btn.setFixedSize(60, 60)
+        btn.setStyleSheet("""
+            QPushButton {
+                border: 2px solid #8f8f91;
+                border-radius: 6px;
+                background-color: black;
+                color: white;
+                font-size: 12px;
+            }
+            QPushButton:checked {
+                border: 2px solid #0078d7;
+            }
+        """)
+        self.pixel_buttons.append(btn)
+        return btn
+
     def update_button_color(self, index: int, color: list):
         """Update the color of a pixel button."""
         r, g, b = [int(c * 255) for c in color]
