@@ -111,12 +111,13 @@ class TreeControlWindow(QMainWindow):
         tree_layout = QVBoxLayout(left_panel)
         
         # Create pixel buttons
-        self.pixel_buttons = []
+        self.pixel_buttons = [None] * 25  # Initialize with None to maintain correct indices
         
-        # Star at the top (pixel 3)
+        # Star at the top (pixel 4)
         star_layout = QHBoxLayout()
         star_layout.addStretch()
-        star_btn = self.create_pixel_button(3, "★")
+        star_btn = self.create_pixel_button(4, "★")
+        self.pixel_buttons[4] = star_btn  # Store at correct index
         star_layout.addWidget(star_btn)
         star_layout.addStretch()
         tree_layout.addLayout(star_layout)
@@ -129,10 +130,11 @@ class TreeControlWindow(QMainWindow):
         for col in range(8):
             col_layout = QVBoxLayout()
             for row in range(3):
-                if pixel_index == 3:  # Skip the star pixel
+                if pixel_index == 4:  # Skip the star pixel
                     pixel_index += 1
                 current_index = pixel_index  # Capture the current index
                 btn = self.create_pixel_button(current_index)
+                self.pixel_buttons[current_index] = btn  # Store at correct index
                 col_layout.addWidget(btn)
                 pixel_index += 1
             tree_body.addLayout(col_layout)
@@ -189,7 +191,6 @@ class TreeControlWindow(QMainWindow):
                 border: 2px solid #0078d7;
             }
         """)
-        self.pixel_buttons.append(btn)
         return btn
 
     def update_button_color(self, index: int, color: list):
@@ -208,9 +209,11 @@ class TreeControlWindow(QMainWindow):
         """)
     
     def select_pixel(self, index):
+        """Select a pixel and update the color picker."""
         # Uncheck all other buttons
-        for i, btn in enumerate(self.pixel_buttons):
-            btn.setChecked(i == index)
+        for btn in self.pixel_buttons:
+            if btn is not None:
+                btn.setChecked(btn == self.pixel_buttons[index])
         
         # Update color picker to show current color
         self.color_picker.set_color(self.pixel_colors[index])
