@@ -1,0 +1,556 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		AB7D3C9D2DCA531100FA64A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB7D3C862DCA530F00FA64A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB7D3C8D2DCA530F00FA64A6;
+			remoteInfo = TreeLights2;
+		};
+		AB7D3CA72DCA531100FA64A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AB7D3C862DCA530F00FA64A6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AB7D3C8D2DCA530F00FA64A6;
+			remoteInfo = TreeLights2;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		AB7D3C8E2DCA530F00FA64A6 /* TreeLights2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TreeLights2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB7D3C9C2DCA531100FA64A6 /* TreeLights2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreeLights2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB7D3CA62DCA531100FA64A6 /* TreeLights2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TreeLights2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AB7D3C902DCA530F00FA64A6 /* TreeLights2 */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TreeLights2;
+			sourceTree = "<group>";
+		};
+		AB7D3C9F2DCA531100FA64A6 /* TreeLights2Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TreeLights2Tests;
+			sourceTree = "<group>";
+		};
+		AB7D3CA92DCA531100FA64A6 /* TreeLights2UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TreeLights2UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AB7D3C8B2DCA530F00FA64A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3C992DCA531100FA64A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3CA32DCA531100FA64A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AB7D3C852DCA530F00FA64A6 = {
+			isa = PBXGroup;
+			children = (
+				AB7D3C902DCA530F00FA64A6 /* TreeLights2 */,
+				AB7D3C9F2DCA531100FA64A6 /* TreeLights2Tests */,
+				AB7D3CA92DCA531100FA64A6 /* TreeLights2UITests */,
+				AB7D3C8F2DCA530F00FA64A6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AB7D3C8F2DCA530F00FA64A6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB7D3C8E2DCA530F00FA64A6 /* TreeLights2.app */,
+				AB7D3C9C2DCA531100FA64A6 /* TreeLights2Tests.xctest */,
+				AB7D3CA62DCA531100FA64A6 /* TreeLights2UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AB7D3C8D2DCA530F00FA64A6 /* TreeLights2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB7D3CB02DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2" */;
+			buildPhases = (
+				AB7D3C8A2DCA530F00FA64A6 /* Sources */,
+				AB7D3C8B2DCA530F00FA64A6 /* Frameworks */,
+				AB7D3C8C2DCA530F00FA64A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AB7D3C902DCA530F00FA64A6 /* TreeLights2 */,
+			);
+			name = TreeLights2;
+			packageProductDependencies = (
+			);
+			productName = TreeLights2;
+			productReference = AB7D3C8E2DCA530F00FA64A6 /* TreeLights2.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AB7D3C9B2DCA531100FA64A6 /* TreeLights2Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB7D3CB32DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2Tests" */;
+			buildPhases = (
+				AB7D3C982DCA531100FA64A6 /* Sources */,
+				AB7D3C992DCA531100FA64A6 /* Frameworks */,
+				AB7D3C9A2DCA531100FA64A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB7D3C9E2DCA531100FA64A6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AB7D3C9F2DCA531100FA64A6 /* TreeLights2Tests */,
+			);
+			name = TreeLights2Tests;
+			packageProductDependencies = (
+			);
+			productName = TreeLights2Tests;
+			productReference = AB7D3C9C2DCA531100FA64A6 /* TreeLights2Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		AB7D3CA52DCA531100FA64A6 /* TreeLights2UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB7D3CB62DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2UITests" */;
+			buildPhases = (
+				AB7D3CA22DCA531100FA64A6 /* Sources */,
+				AB7D3CA32DCA531100FA64A6 /* Frameworks */,
+				AB7D3CA42DCA531100FA64A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AB7D3CA82DCA531100FA64A6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AB7D3CA92DCA531100FA64A6 /* TreeLights2UITests */,
+			);
+			name = TreeLights2UITests;
+			packageProductDependencies = (
+			);
+			productName = TreeLights2UITests;
+			productReference = AB7D3CA62DCA531100FA64A6 /* TreeLights2UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AB7D3C862DCA530F00FA64A6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					AB7D3C8D2DCA530F00FA64A6 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					AB7D3C9B2DCA531100FA64A6 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = AB7D3C8D2DCA530F00FA64A6;
+					};
+					AB7D3CA52DCA531100FA64A6 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = AB7D3C8D2DCA530F00FA64A6;
+					};
+				};
+			};
+			buildConfigurationList = AB7D3C892DCA530F00FA64A6 /* Build configuration list for PBXProject "TreeLights2" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AB7D3C852DCA530F00FA64A6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AB7D3C8F2DCA530F00FA64A6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AB7D3C8D2DCA530F00FA64A6 /* TreeLights2 */,
+				AB7D3C9B2DCA531100FA64A6 /* TreeLights2Tests */,
+				AB7D3CA52DCA531100FA64A6 /* TreeLights2UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AB7D3C8C2DCA530F00FA64A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3C9A2DCA531100FA64A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3CA42DCA531100FA64A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AB7D3C8A2DCA530F00FA64A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3C982DCA531100FA64A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AB7D3CA22DCA531100FA64A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AB7D3C9E2DCA531100FA64A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB7D3C8D2DCA530F00FA64A6 /* TreeLights2 */;
+			targetProxy = AB7D3C9D2DCA531100FA64A6 /* PBXContainerItemProxy */;
+		};
+		AB7D3CA82DCA531100FA64A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AB7D3C8D2DCA530F00FA64A6 /* TreeLights2 */;
+			targetProxy = AB7D3CA72DCA531100FA64A6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		AB7D3CAE2DCA531200FA64A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AB7D3CAF2DCA531200FA64A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		AB7D3CB12DCA531200FA64A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TreeLights2/TreeLights2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AB7D3CB22DCA531200FA64A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TreeLights2/TreeLights2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AB7D3CB42DCA531200FA64A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TreeLights2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TreeLights2";
+			};
+			name = Debug;
+		};
+		AB7D3CB52DCA531200FA64A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2Tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TreeLights2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TreeLights2";
+			};
+			name = Release;
+		};
+		AB7D3CB72DCA531200FA64A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = TreeLights2;
+			};
+			name = Debug;
+		};
+		AB7D3CB82DCA531200FA64A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FWP5U4B3MT;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dwgsoftware.TreeLights2UITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = TreeLights2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB7D3C892DCA530F00FA64A6 /* Build configuration list for PBXProject "TreeLights2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB7D3CAE2DCA531200FA64A6 /* Debug */,
+				AB7D3CAF2DCA531200FA64A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB7D3CB02DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB7D3CB12DCA531200FA64A6 /* Debug */,
+				AB7D3CB22DCA531200FA64A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB7D3CB32DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB7D3CB42DCA531200FA64A6 /* Debug */,
+				AB7D3CB52DCA531200FA64A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB7D3CB62DCA531200FA64A6 /* Build configuration list for PBXNativeTarget "TreeLights2UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB7D3CB72DCA531200FA64A6 /* Debug */,
+				AB7D3CB82DCA531200FA64A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AB7D3C862DCA530F00FA64A6 /* Project object */;
+}
