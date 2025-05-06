@@ -8,6 +8,7 @@ import socket
 import logging
 import os
 import json
+import threading
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 from tree import RGBXmasTree
@@ -17,6 +18,7 @@ DEFAULT_HOST = "0.0.0.0"  # Listen on all interfaces
 DEFAULT_PORT = 65436
 DEFAULT_DEVICE_TYPE = "rgb_tree"
 DEFAULT_BUFFER_SIZE = 1024
+DISCOVERY_PORT = 65435
 
 # Configure logging
 logging.basicConfig(
@@ -79,6 +81,52 @@ class RGBTreeController(DeviceController):
             self.tree.close()
             logger.info("RGB Tree cleaned up")
 
+class DiscoveryServer:
+    """Server that responds to discovery requests."""
+    
+    DISCOVERY_MSG = b"RGB_TREE_DISCOVERY"
+    RESPONSE_MSG = b"RGB_TREE_HERE"
+
+    def __init__(self):
+        self.running = False
+        self.socket = None
+        self.thread = None
+
+    def start(self):
+        """Start the discovery server in a separate thread."""
+        self.running = True
+        self.thread = threading.Thread(target=self._run)
+        self.thread.daemon = True
+        self.thread.start()
+        logger.info("Discovery server started")
+
+    def _run(self):
+        """Run the discovery server."""
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        self.socket.bind(('', DISCOVERY_PORT))
+        
+        while self.running:
+            try:
+                data, addr = self.socket.recvfrom(1024)
+                if data == self.DISCOVERY_MSG:
+                    logger.info(f"Received discovery request from {addr[0]}")
+                    self.socket.sendto(self.RESPONSE_MSG, addr)
+            except Exception as e:
+                if self.running:
+                    logger.error(f"Error in discovery server: {e}")
+
+    def stop(self):
+        """Stop the discovery server."""
+        self.running = False
+        if self.socket:
+            self.socket.close()
+            self.socket = None
+        if self.thread:
+            self.thread.join(timeout=1.0)
+        logger.info("Discovery server stopped")
+
 class NetworkServer:
     """Generic network server for device control."""
     
@@ -88,7 +136,8 @@ class NetworkServer:
         self.device_type = device_type
         self.controller = self._create_controller()
         self.running = False
-    
+        self.discovery_server = DiscoveryServer()
+
     def _create_controller(self) -> DeviceController:
         """Create the appropriate device controller."""
         if self.device_type == "rgb_tree":
@@ -124,6 +173,7 @@ class NetworkServer:
         """Start the server."""
         self.running = True
         self.controller.initialize()
+        self.discovery_server.start()
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             try:
@@ -146,6 +196,7 @@ class NetworkServer:
     def cleanup(self) -> None:
         """Clean up server resources."""
         self.running = False
+        self.discovery_server.stop()
         self.controller.cleanup()
         logger.info("Server stopped")
 
