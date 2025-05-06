@@ -242,8 +242,21 @@ class TreeControlWindow(QMainWindow):
             self.statusBar().showMessage(f'Error: {str(e)}')
     
     def closeEvent(self, event):
-        self.tree_client.disconnect()
-        event.accept()
+        """Handle window close event."""
+        try:
+            # Turn off all lights
+            self.tree_client.off()
+            # Update all buttons to black
+            for i in range(25):
+                self.pixel_colors[i] = [0, 0, 0]
+                self.update_button_color(i, [0, 0, 0])
+            # Disconnect from server
+            self.tree_client.disconnect()
+            self.statusBar().showMessage('Lights turned off and disconnected')
+        except Exception as e:
+            self.statusBar().showMessage(f'Error during shutdown: {str(e)}')
+        finally:
+            event.accept()
 
 def main():
     app = QApplication(sys.argv)
