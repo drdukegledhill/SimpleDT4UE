@@ -1,4 +1,4 @@
-# SimpleDT4UE - Simple Digital Twin for Unity Engine
+# SimpleDT4VR - Simple Digital Twin for Virtual Reality
 
 A low-cost, open-source digital twinning solution using a Christmas tree as a demonstration application. This project showcases real-time synchronization between multiple clients (Python, macOS, iOS, and Unity) communicating with a central Python server.
 
@@ -34,7 +34,7 @@ The project is organized into several components:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/drdukegledhill/SimpleDT4UE.git
+   git clone https://github.com/drdukegledhill/SimpleDT4VR.git
    ```
 
 2. Set up the Python server:
