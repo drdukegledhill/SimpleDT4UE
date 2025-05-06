@@ -1,86 +1,168 @@
-# echo-server.py
+#!/usr/bin/env python3
+"""
+Generic network server for controlling physical devices.
+Supports multiple device types through a common interface.
+"""
 
 import socket
-import threading
 import logging
 import os
+import json
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Optional
 from tree import RGBXmasTree
-from time import sleep
 
 # Constants for default configuration
-DEFAULT_HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-DEFAULT_PORT = 65436  # Port to listen on (non-privileged ports are > 1023)
+DEFAULT_HOST = "0.0.0.0"  # Listen on all interfaces
+DEFAULT_PORT = 65436
+DEFAULT_DEVICE_TYPE = "rgb_tree"
+DEFAULT_BUFFER_SIZE = 1024
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
-# Initialize the tree
-tree = RGBXmasTree()
+class DeviceController(ABC):
+    """Abstract base class for device controllers."""
+    
+    @abstractmethod
+    def initialize(self) -> None:
+        """Initialize the device."""
+        pass
+    
+    @abstractmethod
+    def process_command(self, command: Dict[str, Any]) -> None:
+        """Process a command for the device."""
+        pass
+    
+    @abstractmethod
+    def cleanup(self) -> None:
+        """Clean up device resources."""
+        pass
 
-# Get host and port from environment variables or use defaults
-HOST = os.getenv("HOST", DEFAULT_HOST)
-PORT = int(os.getenv("PORT", DEFAULT_PORT))
-
-def updateTree(datastring):
-    """Update the tree's LED colors based on the received data string."""
-    try:
-        brokenstring = datastring.split(",")
-        if len(brokenstring) != 4:
-            raise ValueError("Invalid data format")
-        tree[int(brokenstring[0])].color = (
-            float(brokenstring[1]),
-            float(brokenstring[2]),
-            float(brokenstring[3]),
-        )
-    except (ValueError, IndexError) as e:
-        logger.error(f"Error updating tree: {e}")
-
-def close(s):
-    """Gracefully close the socket and reset the tree."""
-    try:
-        s.shutdown(socket.SHUT_RDWR)
-    except Exception as e:
-        logger.warning(f"Error shutting down socket: {e}")
-    finally:
-        s.close()
-        tree.color = (0, 0, 0)
-        logger.info("Server closed")
-
-def handle_client(conn, addr):
-    """Handle communication with a single client."""
-    with conn:
-        logger.info(f"Connected by {addr}")
-        while True:
-            try:
-                data = conn.recv(1024).decode("utf-8")
-                if not data:
-                    break
-                updateTree(data)
-            except Exception as e:
-                logger.error(f"Error handling client {addr}: {e}")
-                break
-    logger.info(f"Connection with {addr} closed")
-
-def start_server():
-    """Start the server and listen for incoming connections."""
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+class RGBTreeController(DeviceController):
+    """Controller for the RGB Christmas Tree."""
+    
+    def __init__(self):
+        self.tree = None
+    
+    def initialize(self) -> None:
+        """Initialize the RGB tree."""
+        self.tree = RGBXmasTree()
+        logger.info("RGB Tree initialized")
+    
+    def process_command(self, command: Dict[str, Any]) -> None:
+        """Process a command for the RGB tree."""
         try:
-            s.bind((HOST, PORT))
-            s.listen()
-            logger.info(f"Server started on {HOST}:{PORT}")
-            while True:
-                conn, addr = s.accept()
-                threading.Thread(target=handle_client, args=(conn, addr)).start()
-        except Exception as e:
-            logger.error(f"Server error: {e}")
-        finally:
-            close(s)
+            if command["type"] == "set_pixel":
+                pixel = command["pixel"]
+                color = command["color"]
+                self.tree[pixel].color = color
+            elif command["type"] == "set_all":
+                color = command["color"]
+                self.tree.color = color
+            elif command["type"] == "off":
+                self.tree.off()
+            else:
+                raise ValueError(f"Unknown command type: {command['type']}")
+        except (KeyError, ValueError, IndexError) as e:
+            logger.error(f"Error processing command: {e}")
+            raise
+    
+    def cleanup(self) -> None:
+        """Clean up the RGB tree."""
+        if self.tree:
+            self.tree.color = (0, 0, 0)
+            self.tree.close()
+            logger.info("RGB Tree cleaned up")
 
-if __name__ == "__main__":
+class NetworkServer:
+    """Generic network server for device control."""
+    
+    def __init__(self, host: str, port: int, device_type: str):
+        self.host = host
+        self.port = port
+        self.device_type = device_type
+        self.controller = self._create_controller()
+        self.running = False
+    
+    def _create_controller(self) -> DeviceController:
+        """Create the appropriate device controller."""
+        if self.device_type == "rgb_tree":
+            return RGBTreeController()
+        else:
+            raise ValueError(f"Unknown device type: {self.device_type}")
+    
+    def handle_client(self, conn: socket.socket, addr: tuple) -> None:
+        """Handle communication with a single client."""
+        with conn:
+            logger.info(f"Connected by {addr}")
+            while self.running:
+                try:
+                    data = conn.recv(DEFAULT_BUFFER_SIZE).decode("utf-8")
+                    if not data:
+                        break
+                    
+                    # Parse the command
+                    command = json.loads(data)
+                    self.controller.process_command(command)
+                    
+                    # Send acknowledgment
+                    conn.sendall(b"OK\n")
+                except json.JSONDecodeError:
+                    logger.error(f"Invalid JSON from {addr}")
+                    conn.sendall(b"ERROR: Invalid JSON format\n")
+                except Exception as e:
+                    logger.error(f"Error handling client {addr}: {e}")
+                    conn.sendall(f"ERROR: {str(e)}\n".encode())
+                    break
+    
+    def start(self) -> None:
+        """Start the server."""
+        self.running = True
+        self.controller.initialize()
+        
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind((self.host, self.port))
+                s.listen()
+                logger.info(f"Server started on {self.host}:{self.port}")
+                
+                while self.running:
+                    try:
+                        conn, addr = s.accept()
+                        self.handle_client(conn, addr)
+                    except KeyboardInterrupt:
+                        break
+                    except Exception as e:
+                        logger.error(f"Error accepting connection: {e}")
+            finally:
+                self.cleanup()
+    
+    def cleanup(self) -> None:
+        """Clean up server resources."""
+        self.running = False
+        self.controller.cleanup()
+        logger.info("Server stopped")
+
+def main():
+    """Main entry point."""
+    # Get configuration from environment variables or use defaults
+    host = os.getenv("HOST", DEFAULT_HOST)
+    port = int(os.getenv("PORT", DEFAULT_PORT))
+    device_type = os.getenv("DEVICE_TYPE", DEFAULT_DEVICE_TYPE)
+    
     try:
-        start_server()
+        server = NetworkServer(host, port, device_type)
+        server.start()
     except KeyboardInterrupt:
         logger.info("Server interrupted by user")
-        tree.color = (0, 0, 0)
-        logger.info("Tree reset and server stopped")
+    except Exception as e:
+        logger.error(f"Server error: {e}")
+
+if __name__ == "__main__":
+    main()
