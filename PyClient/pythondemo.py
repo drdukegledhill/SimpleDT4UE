@@ -9,70 +9,16 @@ import json
 import time
 import random
 import math
-import ipaddress
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
 class TreeClient:
-    DISCOVERY_PORT = 65435  # Port for discovery (different from control port)
-    CONTROL_PORT = 65436   # Port for actual control
-    DISCOVERY_TIMEOUT = 2.0  # Seconds to wait for discovery response
-
-    def __init__(self, host: Optional[str] = None, port: int = CONTROL_PORT):
+    def __init__(self, host: str = "localhost", port: int = 65436):
         self.host = host
         self.port = port
         self.socket = None
 
-    @staticmethod
-    def find_pi() -> Optional[str]:
-        """
-        Discover the Raspberry Pi on the network using UDP broadcast.
-        Returns the IP address of the Pi if found, None otherwise.
-        """
-        # Create UDP socket for discovery
-        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-            s.settimeout(TreeClient.DISCOVERY_TIMEOUT)
-            
-            # Send discovery message
-            discovery_msg = b"RGB_TREE_DISCOVERY"
-            try:
-                # Try to broadcast to common local network subnets
-                common_subnets = [
-                    "192.168.1.255",  # Common home network
-                    "192.168.0.255",  # Another common home network
-                    "10.0.0.255",     # Some business networks
-                    "172.16.0.255"    # Some business networks
-                ]
-                
-                for subnet in common_subnets:
-                    try:
-                        s.sendto(discovery_msg, (subnet, TreeClient.DISCOVERY_PORT))
-                    except socket.error:
-                        continue
-                
-                # Wait for response
-                while True:
-                    try:
-                        data, addr = s.recvfrom(1024)
-                        if data == b"RGB_TREE_HERE":
-                            print(f"Found RGB Tree at {addr[0]}")
-                            return addr[0]
-                    except socket.timeout:
-                        break
-                    
-            except Exception as e:
-                print(f"Error during discovery: {e}")
-            
-            return None
-
     def connect(self) -> None:
         """Connect to the tree server."""
-        if not self.host:
-            print("No host specified, attempting to discover Raspberry Pi...")
-            self.host = self.find_pi()
-            if not self.host:
-                raise ConnectionError("Could not find Raspberry Pi on the network")
-
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.host, self.port))
         print(f"Connected to server at {self.host}:{self.port}")
@@ -180,8 +126,8 @@ class TreeClient:
 
 def main():
     """Run the demo."""
-    # Try to find the Pi automatically
-    client = TreeClient()
+    # Create client with known IP address
+    client = TreeClient(host="192.168.1.100")  # Replace with your Pi's IP
     
     try:
         client.connect()
