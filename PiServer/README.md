@@ -25,7 +25,7 @@ The central server component of the SimpleDT4UE project, designed to run on a Ra
 
 2. Configure the server:
    - Edit `server.py` to set your preferences
-   - Default port is 5000
+   - Default port is 65436
 
 3. Start the server:
    ```bash
@@ -35,7 +35,7 @@ The central server component of the SimpleDT4UE project, designed to run on a Ra
 ## Network Protocol
 
 The server implements a simple TCP-based protocol:
-- Listens on port 5000
+- Listens on port 65436
 - Accepts multiple client connections
 - Broadcasts state updates to all connected clients
 - Uses JSON for message formatting
@@ -55,7 +55,7 @@ No build step required - the server runs directly with Python.
 
 - Check the server logs for connection issues
 - Ensure the port is not blocked by a firewall
-- Verify client IP addresses are correct
+- Verify client hostnames are correct
 - Monitor system resources (CPU, memory)
 
 ## License

@@ -32,7 +32,7 @@ A Unity-based 3D visualization client for the SimpleDT4UE project. This demo sho
 ## Network Protocol
 
 The client communicates with the server using a simple TCP-based protocol:
-- Connects to the server on port 5000
+- Connects to `simpledigitaltwin.local:65436`
 - Sends/receives JSON messages for state updates
 - Maintains real-time synchronization
 
@@ -56,7 +56,7 @@ The client communicates with the server using a simple TCP-based protocol:
 
 - Ensure the server is running before starting the client
 - Check the console for network connection errors
-- Verify the server IP address is correct
+- Verify the server hostname is correct
 
 ## License
 

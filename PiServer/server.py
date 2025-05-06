@@ -15,7 +15,7 @@ from tree import RGBXmasTree
 # Constants for default configuration
 DEFAULT_HOST = "0.0.0.0"  # Listen on all interfaces
 DEFAULT_PORT = 65436
-DEFAULT_DEVICE_TYPE = "rgb_tree"
+DEFAULT_DEVICE_TYPE = "rgb"  # Default to RGB tree
 DEFAULT_BUFFER_SIZE = 1024
 
 # Configure logging

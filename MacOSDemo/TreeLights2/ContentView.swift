@@ -14,7 +14,7 @@ struct Pixel: Identifiable {
 }
 
 struct ContentView: View {
-    @StateObject private var treeClient = TreeClient(host: "192.168.178.195", port: 65436)
+    @StateObject private var treeClient = TreeClient()
     @State private var isDemoRunning = false
     @State private var stopDemoRequested = false
     @State private var selectedPixel: Int? = nil

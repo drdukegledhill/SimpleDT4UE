@@ -19,7 +19,7 @@ class TreeClient: ObservableObject {
     @Published var errorMessage: String?
     @Published var connectionState: String = "Initializing"
 
-    init(host: String = "192.168.178.195", port: UInt16 = 65436) {
+    init(host: String = "simpledigitaltwin.local", port: UInt16 = 65436) {
         self.host = host
         self.port = port
     }

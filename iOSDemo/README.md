@@ -20,7 +20,7 @@ A native iOS application for controlling the SimpleDT4UE digital twin system. Th
 
 1. Open the project in Xcode
 2. Select your target device/simulator
-3. Configure the server IP address in the app settings
+3. Configure the server hostname in the app settings
 4. Build and run the application
 
 ## Controls
@@ -33,7 +33,7 @@ A native iOS application for controlling the SimpleDT4UE digital twin system. Th
 ## Network Protocol
 
 The application communicates with the server using a simple TCP-based protocol:
-- Connects to the server on port 5000
+- Connects to `simpledigitaltwin.local:65436`
 - Sends/receives JSON messages for state updates
 - Maintains real-time synchronization
 
@@ -56,7 +56,7 @@ The application communicates with the server using a simple TCP-based protocol:
 
 - Ensure the server is running before starting the client
 - Check the console for network connection errors
-- Verify the server IP address is correct
+- Verify the server hostname is correct
 - Ensure your device is on the same network as the server
 
 ## License

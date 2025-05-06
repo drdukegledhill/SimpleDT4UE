@@ -57,8 +57,8 @@ The project is organized into several components:
 
 The system uses a simple TCP-based protocol for communication:
 
-- Server listens on port 5000
-- Clients connect and send/receive JSON messages
+- Server listens on port 65436
+- Clients connect to `simpledigitaltwin.local:65436`
 - Real-time updates for all connected clients
 
 ## Contributing

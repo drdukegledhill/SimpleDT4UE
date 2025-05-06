@@ -23,8 +23,8 @@ A Python-based client implementation for the SimpleDT4UE project. This demo prov
    ```
 
 2. Configure the client:
-   - Edit the server IP address in the script
-   - Default port is 5000
+   - Edit the server hostname in the script
+   - Default port is 65436
 
 3. Run the client:
    ```bash
@@ -34,7 +34,7 @@ A Python-based client implementation for the SimpleDT4UE project. This demo prov
 ## Network Protocol
 
 The client implements a simple TCP-based protocol:
-- Connects to the server on port 5000
+- Connects to `simpledigitaltwin.local:65436`
 - Sends/receives JSON messages
 - Maintains real-time synchronization
 
@@ -53,7 +53,7 @@ No build step required - the client runs directly with Python.
 
 - Ensure the server is running
 - Check network connectivity
-- Verify the server IP address
+- Verify the server hostname
 - Check the console for error messages
 
 ## License
