@@ -106,6 +106,8 @@ class NetworkServer:
                     if not data:
                         break
                     
+                    # Print every instruction received (raw data)
+                    print(f"[DEBUG] Received from {addr}: {repr(data)}")
                     # Parse the command
                     command = json.loads(data)
                     self.controller.process_command(command)
