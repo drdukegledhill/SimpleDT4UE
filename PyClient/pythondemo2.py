@@ -27,7 +27,7 @@ class ColorPicker(QWidget):
         
         # Title
         title = QLabel("Color Controls")
-        title.setFont(QFont("SF Pro Display", 16, QFont.Weight.Bold))
+        title.setFont(QFont("Arial", 16, QFont.Weight.Bold))
         layout.addWidget(title)
         
         # Add some spacing
@@ -37,7 +37,7 @@ class ColorPicker(QWidget):
         for color, label in [("Red", "red_slider"), ("Green", "green_slider"), ("Blue", "blue_slider")]:
             color_layout = QVBoxLayout()
             color_label = QLabel(color)
-            color_label.setFont(QFont("SF Pro Text", 12))
+            color_label.setFont(QFont("Arial", 12))
             color_layout.addWidget(color_label)
             
             slider = QSlider(Qt.Orientation.Horizontal)
@@ -68,7 +68,7 @@ class ColorPicker(QWidget):
         # Brightness slider
         brightness_layout = QVBoxLayout()
         brightness_label = QLabel("Brightness")
-        brightness_label.setFont(QFont("SF Pro Text", 12))
+        brightness_label.setFont(QFont("Arial", 12))
         brightness_layout.addWidget(brightness_label)
         
         self.brightness_slider = QSlider(Qt.Orientation.Horizontal)
@@ -104,7 +104,7 @@ class ColorPicker(QWidget):
         preview_layout = QVBoxLayout(preview_frame)
         
         preview_label = QLabel("Preview")
-        preview_label.setFont(QFont("SF Pro Text", 12))
+        preview_label.setFont(QFont("Arial", 12))
         preview_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         preview_layout.addWidget(preview_label)
         
@@ -119,7 +119,6 @@ class ColorPicker(QWidget):
         preview_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
         layout.addWidget(preview_frame)
-        layout.addStretch()
         
         self.setLayout(layout)
     
@@ -190,7 +189,7 @@ class TreeControlWindow(QMainWindow):
                 border: none;
                 padding: 8px 16px;
                 border-radius: 6px;
-                font-family: "SF Pro Text";
+                font-family: Arial;
                 font-size: 13px;
             }
             QPushButton:hover {
@@ -207,9 +206,13 @@ class TreeControlWindow(QMainWindow):
         # Create central widget and main layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        main_layout = QHBoxLayout(central_widget)
+        main_layout = QVBoxLayout(central_widget)
         main_layout.setSpacing(20)
         main_layout.setContentsMargins(20, 20, 20, 20)
+        
+        # Create horizontal layout for tree and color picker
+        content_layout = QHBoxLayout()
+        content_layout.setSpacing(20)
         
         # Left side: Tree layout
         left_panel = QWidget()
@@ -224,7 +227,7 @@ class TreeControlWindow(QMainWindow):
         
         # Title
         title = QLabel("RGB Christmas Tree")
-        title.setFont(QFont("SF Pro Display", 20, QFont.Weight.Bold))
+        title.setFont(QFont("Arial", 20, QFont.Weight.Bold))
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         tree_layout.addWidget(title)
         
@@ -284,29 +287,84 @@ class TreeControlWindow(QMainWindow):
             }
         """)
         right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(0, 0, 0, 0)
+        right_layout.setContentsMargins(20, 20, 20, 20)
         
         # Add color picker
         self.color_picker = ColorPicker(self)
         right_layout.addWidget(self.color_picker)
+        right_layout.addStretch()
         
-        # Add control buttons
-        control_layout = QHBoxLayout()
-        control_layout.setSpacing(10)
+        # Add panels to content layout
+        content_layout.addWidget(left_panel, 2)
+        content_layout.addWidget(right_panel, 1)
         
+        # Add content layout to main layout
+        main_layout.addLayout(content_layout)
+        
+        # Create bottom panel for buttons
+        bottom_panel = QWidget()
+        bottom_panel.setStyleSheet("""
+            QWidget {
+                background-color: #e0e0e0;
+                border-radius: 10px;
+            }
+        """)
+        bottom_layout = QHBoxLayout(bottom_panel)
+        bottom_layout.setContentsMargins(20, 20, 20, 20)
+        bottom_layout.setSpacing(10)
+        
+        # Add debug label
+        debug_label = QLabel("Control Panel")
+        debug_label.setFont(QFont("Arial", 14, QFont.Weight.Bold))
+        bottom_layout.addWidget(debug_label)
+        
+        # Add control buttons with more obvious styling
         self.off_selected_button = QPushButton('Turn Off Selected')
+        self.off_selected_button.setStyleSheet("""
+            QPushButton {
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+            QPushButton:hover {
+                background-color: #0071EB;
+            }
+            QPushButton:pressed {
+                background-color: #0062CC;
+            }
+        """)
         self.off_selected_button.clicked.connect(self.turn_off_selected)
-        control_layout.addWidget(self.off_selected_button)
+        bottom_layout.addWidget(self.off_selected_button)
         
         self.off_all_button = QPushButton('Turn Off All')
+        self.off_all_button.setStyleSheet("""
+            QPushButton {
+                background-color: #007AFF;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                min-width: 150px;
+            }
+            QPushButton:hover {
+                background-color: #0071EB;
+            }
+            QPushButton:pressed {
+                background-color: #0062CC;
+            }
+        """)
         self.off_all_button.clicked.connect(self.turn_off_all)
-        control_layout.addWidget(self.off_all_button)
+        bottom_layout.addWidget(self.off_all_button)
         
-        right_layout.addLayout(control_layout)
+        bottom_layout.addStretch()
         
-        # Add panels to main layout
-        main_layout.addWidget(left_panel, 2)
-        main_layout.addWidget(right_panel, 1)
+        # Add bottom panel to main layout
+        main_layout.addWidget(bottom_panel)
         
         # Connect to the tree
         try:
@@ -317,7 +375,7 @@ class TreeControlWindow(QMainWindow):
     
     def create_pixel_button(self, index: int, text: str = None) -> QPushButton:
         """Create a pixel button with consistent styling."""
-        btn = QPushButton(text or f'Pixel {index}')
+        btn = QPushButton(text or f'P{index}')
         btn.setCheckable(True)
         btn.clicked.connect(lambda checked, idx=index: self.select_pixel(idx))
         btn.setFixedSize(60, 60)
@@ -327,7 +385,7 @@ class TreeControlWindow(QMainWindow):
                 border-radius: 30px;
                 background-color: black;
                 color: white;
-                font-family: "SF Pro Text";
+                font-family: Arial;
                 font-size: 12px;
             }
             QPushButton:checked {
@@ -348,7 +406,7 @@ class TreeControlWindow(QMainWindow):
                 border-radius: 30px;
                 background-color: rgb({r}, {g}, {b});
                 color: {'white' if (r + g + b) < 384 else 'black'};
-                font-family: "SF Pro Text";
+                font-family: Arial;
                 font-size: 12px;
             }}
             QPushButton:checked {{
@@ -408,7 +466,7 @@ def main():
     app = QApplication(sys.argv)
     
     # Set application-wide font
-    app.setFont(QFont("SF Pro Text", 13))
+    app.setFont(QFont("Arial", 13))
     
     window = TreeControlWindow()
     window.show()
